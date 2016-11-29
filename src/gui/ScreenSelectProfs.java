@@ -55,7 +55,7 @@ public class ScreenSelectProfs extends JDialog
 		leftLayout.rowHeights = new int[]{0, 28,0,0, 0};
 		leftPanel.setLayout(leftLayout);
 		
-		JList profList = new JList(PROFS);
+		JList<String> profList = new JList<String>(PROFS);
 		profList.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
 		GridBagConstraints gbc_profList = new GridBagConstraints();
 		gbc_profList.insets = new Insets(0, 0, 5, 0);
