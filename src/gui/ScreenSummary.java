@@ -1,33 +1,35 @@
 package gui;
 
+import java.awt.Container;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
-import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.JTextPane;
 
-public class ScreenSummary extends JDialog 
+public class ScreenSummary extends Container
 {
 	private static final long serialVersionUID = 5L;
-	private JFrame procFrame;
 	
-	public ScreenSummary(){ initialize(); }
-
-	private void initialize()
+	public ScreenSummary(JFrame parent)
 	{
-		procFrame = new JFrame();
-		procFrame.setBounds(100, 100, 450, 300);
-		procFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		
+		initialize(parent);
+		parent.revalidate();
+	}
+
+	private void initialize(JFrame parent)
+	{
+		this.setSize(450,300);
 		GridBagLayout gridBagLayout = new GridBagLayout();
 		gridBagLayout.columnWidths = new int[]{25,400,25};
 		gridBagLayout.rowHeights = new int[]{28, 0, 0, 0, 0, 0, 0, 0};
-		procFrame.getContentPane().setLayout(gridBagLayout);
+		this.setLayout(gridBagLayout);
 		
 		// Summary text area
 		JScrollPane textScrollPane = new JScrollPane();
@@ -36,7 +38,7 @@ public class ScreenSummary extends JDialog
 		gbc_pane.anchor = GridBagConstraints.CENTER;
 		gbc_pane.gridx = 1;
 		gbc_pane.gridy = 0;
-		procFrame.getContentPane().add(textScrollPane, gbc_pane);
+		this.add(textScrollPane, gbc_pane);
 		
 		JTextPane textPane = new JTextPane();
 		textPane.setEditable(false);
@@ -49,7 +51,7 @@ public class ScreenSummary extends JDialog
 		gbc_label.anchor = GridBagConstraints.CENTER;
 		gbc_label.gridx = 1;
 		gbc_label.gridy = 2;
-		procFrame.getContentPane().add(buttonsLabel, gbc_label);
+		this.add(buttonsLabel, gbc_label);
 		
 		// Split pane for two buttons
 		JSplitPane splitPane = new JSplitPane(); 
@@ -57,13 +59,31 @@ public class ScreenSummary extends JDialog
 		gbc_split.anchor = GridBagConstraints.CENTER;
 		gbc_split.gridx = 1;
 		gbc_split.gridy = 3;
-		procFrame.getContentPane().add(splitPane, gbc_split);
+		this.add(splitPane, gbc_split);
 		
 		// Continue and exit buttons
 		JButton button1 = new JButton("Process next semester");
+		button1.addActionListener(new ActionListener()
+		{
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				parent.setContentPane(new ScreenSelectProfs(parent));
+			}
+		});
 		splitPane.setLeftComponent(button1);
+		
 		JButton button2 = new JButton("Save and quit program");
+		button2.addActionListener(new ActionListener()
+		{
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				parent.dispose();
+			}
+		});
 		splitPane.setRightComponent(button2);
+		
+		// Dispaly this pane in the window
+		parent.setContentPane(this);
 	}
 	
 }

@@ -1,33 +1,33 @@
 package gui;
 
+import java.awt.Container;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
-import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextPane;
 
-public class ScreenProcRequests extends JDialog 
+public class ScreenProcRequests extends Container
 {
-
 	private static final long serialVersionUID = 4L;
-	private JFrame procFrame;
 
-	public ScreenProcRequests() { initialize(); }
-	
-	private void initialize()
+	public ScreenProcRequests(JFrame parent)
 	{
-		procFrame = new JFrame();
-		procFrame.setBounds(100, 100, 450, 300);
-		procFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		
+		initialize(parent);
+		parent.revalidate();
+	}
+	private void initialize(JFrame parent)
+	{
+		this.setSize(450,300);
 		GridBagLayout gridBagLayout = new GridBagLayout();
 		gridBagLayout.columnWidths = new int[]{25,400,25};
 		gridBagLayout.rowHeights = new int[]{28, 0, 0, 0, 0, 0, 0, 0};
-		procFrame.getContentPane().setLayout(gridBagLayout);
+		this.setLayout(gridBagLayout);
 		
 		// Header label
 		JLabel headLabel = new JLabel("Processing student requests...");
@@ -35,7 +35,7 @@ public class ScreenProcRequests extends JDialog
 		gbc_label.anchor = GridBagConstraints.CENTER;
 		gbc_label.gridx = 1;
 		gbc_label.gridy = 0;
-		procFrame.getContentPane().add(headLabel, gbc_label);
+		this.add(headLabel, gbc_label);
 		
 		// Main text area
 		JScrollPane textScrollPane = new JScrollPane();
@@ -44,7 +44,7 @@ public class ScreenProcRequests extends JDialog
 		gbc_pane.anchor = GridBagConstraints.CENTER;
 		gbc_pane.gridx = 1;
 		gbc_pane.gridy = 1;
-		procFrame.getContentPane().add(textScrollPane, gbc_pane);
+		this.add(textScrollPane, gbc_pane);
 		
 		JTextPane textPane = new JTextPane();
 		textPane.setEditable(false);
@@ -53,10 +53,20 @@ public class ScreenProcRequests extends JDialog
 		
 		// 'Continue' button
 		JButton button = new JButton("Continue");
+		button.addActionListener(new ActionListener()
+		{
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				parent.setContentPane(new ScreenSummary(parent));
+			}
+		});
 		GridBagConstraints gbc_button = new GridBagConstraints();
 		gbc_button.anchor = GridBagConstraints.CENTER;
 		gbc_button.gridx = 1;
 		gbc_button.gridy = 3;
-		procFrame.getContentPane().add(button, gbc_button);
+		this.add(button, gbc_button);
+		
+		// Dispaly this pane in the window
+		parent.setContentPane(this);
 	}
 }
